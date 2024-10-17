@@ -1,27 +1,47 @@
 'use client'
 import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation"; // navigating by force to other login pg 
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function Signup() {
+    const router = useRouter()
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
     });
 
-    // const handleSubmit = (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     console.log(formData); // Handle form submission logic
-    // };
-    const handleSubmit = (e: any) => {
+
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        console.log("This is formdata from FE:", formData)
-        setFormData({
-            username: '',
-            email: '',
-            password: '',
-        })
+        try {
+
+            toast.success('Processing...')
+            const response = await axios.post("api/users/signup", formData)
+            if (response.status === 200) {
+                toast.success('Signup successful! Redirecting to login page...');
+                router.push('/login')
+            }
+
+            console.log("---- src/app/signup (axios res of post-/api/users/signup) Signup success , response=", response)
+
+            // setFormData({
+            //     username: '',
+            //     email: '',
+            //     password: '',
+            // })
+        } catch (err: any) {
+            // If the error status is 400, inform the user that the account already exists
+            if (err.response && err.response.status === 400) {
+                toast.error(err.response.data.message || "User already exists!");
+            } else {
+                // Handle other errors
+                toast.error(err.message || "An error occurred during signup.");
+            }
+            console.error("Sign-up failed!", err);
+        }
     }
 
 

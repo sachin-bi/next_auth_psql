@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
 
+
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
@@ -21,6 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           message: "username or email already exists,try diff. man!!",
+          success: false,
         },
         { status: 400 }
       );
