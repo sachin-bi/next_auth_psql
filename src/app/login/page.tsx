@@ -1,9 +1,12 @@
 'use client'
 import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation"; // navigating by force to other login pg 
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function Login() {
+    const router = useRouter()
     const [formData, setFormData] = useState({
 
         email: '',
@@ -14,14 +17,35 @@ export default function Login() {
     //     e.preventDefault();
     //     console.log(formData); // Handle form submission logic
     // };
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        console.log("This is formdata from FE:", formData)
-        setFormData({
+        // console.log("This is formdata from FE:", formData)
+        try {
 
-            email: '',
-            password: '',
-        })
+            const response = await axios.post('api/users/login', formData)  //.get had type issue
+            // console.log("This is formdata from FE:", response.data)
+            if (!response.data.message) {
+                toast.error(response.data.message)
+            }
+            if (response.status === 200) {
+                toast.success('Login successful! Redirecting to profile page...');
+                router.push('/profile')
+            }
+            // setFormData({
+
+            //     email: '',
+            //     password: '',
+            // })
+        } catch (err: any) {
+            // If the error status is 400, inform the user that the account already exists
+            if (err.response && err.response.status === 400) {
+                toast.error(err.response.data.message || "wrong pass or user don't exists");
+            } else {
+                // Handle other errors
+                toast.error(err.message || "An error occurred during signup.");
+            }
+            console.error("Sign-up failed!", err);
+        }
     }
 
 
@@ -83,7 +107,7 @@ export default function Login() {
                     <p className="text-sm">
                         New here?{' '}
                         <Link href="/signup" className="text-indigo-600 hover:text-indigo-500">
-                            Sign-up 
+                            Sign-up
                         </Link>
                     </p>
                 </div>

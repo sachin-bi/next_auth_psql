@@ -18,29 +18,40 @@ export default function Signup() {
         e.preventDefault();
         try {
 
-            toast.success('Processing...')
+            // toast.success('Processing...')
+            // toast.loading('Processing..')
             const response = await axios.post("api/users/signup", formData)
+
+            toast.promise(Promise.resolve(response), {
+                loading: 'Loading',
+                success: 'Got the data',
+                error: 'Error when fetching,response',
+            });
+
             if (response.status === 200) {
                 toast.success('Signup successful! Redirecting to login page...');
                 router.push('/login')
             }
 
-            console.log("---- src/app/signup (axios res of post-/api/users/signup) Signup success , response=", response)
+            // console.log(Promise.resolve(response));
+
+            // console.log("---- src/app/signup (axios res of post-/api/users/signup) Signup success , response=", response.data)
 
             // setFormData({
             //     username: '',
             //     email: '',
             //     password: '',
             // })
-        } catch (err: any) {
-            // If the error status is 400, inform the user that the account already exists
-            if (err.response && err.response.status === 400) {
-                toast.error(err.response.data.message || "User already exists!");
-            } else {
-                // Handle other errors
-                toast.error(err.message || "An error occurred during signup.");
-            }
-            console.error("Sign-up failed!", err);
+
+                } catch (err: any) {
+                    // If the error status is 400, inform the user that the account already exists
+                    if (err.response && err.response.status === 400) {
+                        toast.error(err.response.data.message || "User already exists!");
+                    } else {
+                        // Handle other errors
+                        toast.error(err.message || "An error occurred during signup.");
+                    }
+                    console.error("Sign-up failed!", err);
         }
     }
 
