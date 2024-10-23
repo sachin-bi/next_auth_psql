@@ -44,7 +44,7 @@ export default function Login() {
                 // Handle other errors
                 toast.error(err.message || "An error occurred during signup.");
             }
-            console.error("Sign-up failed!", err);
+            console.error("login failed!", err);
         }
     }
 
