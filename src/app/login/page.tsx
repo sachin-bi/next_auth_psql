@@ -28,7 +28,7 @@ export default function Login() {
                 toast.error(response.data.message)
             }
             if (response.status === 200) {
-                toast.success('Login successful! Redirecting to profile page...');
+                toast.success('Login successful! Redirected to profile page...');
                 router.push('/profile')
             }
             // setFormData({

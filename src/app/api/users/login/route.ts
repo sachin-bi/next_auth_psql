@@ -45,9 +45,9 @@ export async function POST(request: NextRequest) {
     const tokenData = {
       // usually only id is kept here, otherwise it'll consume more bandwidth in network
       id: user.id,
-      username: user.username,
-      email: user.email,
-      createdAt: user.createdAt,
+      // username: user.username,
+      // email: user.email,
+      // createdAt: user.createdAt,
     };
 
     // expiresIn: expressed in seconds or a string describing a time span vercel/ms.
